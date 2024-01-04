@@ -1,10 +1,22 @@
-const router = require('express').Router();
-const blogRoutes = require('./blogRoutes');
-const commentRoutes = require('./commentRoutes');
-const userRoutes = require('./userRoutes');
+const User = require('./User');
+const Blog = require('./Blog');
+const Comment = require('./Comment');
 
-router.use('/blogs', blogRoutes);
-router.use('/comments', commentRoutes);
-router.use('/users', userRoutes);
+User.hasMany(Blog, {
+  foreignKey: 'user_id',
+  onDelete: 'CASCADE'
+});
 
-module.exports = router;
+Blog.belongsTo(User, {
+  foreignKey: 'user_id'
+});
+
+Blog.hasMany(Comment,{
+  foreignKey: 'blog_id'
+})
+
+Comment.belongsTo(User, {
+    foreignKey: 'user_id',
+})
+
+module.exports = { User, Blog, Comment };
